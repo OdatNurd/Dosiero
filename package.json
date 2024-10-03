@@ -1,0 +1,21 @@
+{
+  "name": "dosiero",
+  "version": "0.0.1",
+  "private": false,
+  "description": "A site almost, but not quite, entirely unlike GitHub Gists",
+  "type": "module",
+  "repository": "https://github.com/OdatNurd/Dosiero",
+  "author": {
+    "name": "OdatNurd",
+    "email": "odatnurd@gmail.com",
+    "url": "https://odatnurd.net"
+  },
+  "scripts": {
+    "local:seed-db": "cd backend && npm run local:seed-db",
+    "client:run": "cd client && npm run run",
+    "client:watch": "cd client && npm run watch",
+    "client:build": "cd client && npm run build",
+    "backend:run": "cd backend && npm run run",
+    "backend:deploy": "cd backend && npm run deploy"
+  }
+}
