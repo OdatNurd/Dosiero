@@ -16,6 +16,8 @@
     "client:watch": "cd client && npm run watch",
     "client:build": "cd client && npm run build",
     "backend:run": "cd backend && npm run run",
-    "backend:deploy": "cd backend && npm run deploy"
+    "backend:deploy": "cd backend && npm run deploy",
+    "acheron:build": "cd backend/node_modules/@axel669/acheron/worker && pnpm i && pnpm run build",
+    "acheron:run": "cd backend/node_modules/@axel669/acheron/worker && pnpm run start"
   }
 }

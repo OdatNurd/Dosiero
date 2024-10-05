@@ -1,5 +1,5 @@
 {
-  "name": "dosiery-api",
+  "name": "dosiero-api",
   "version": "0.0.1",
   "private": false,
   "description": "The Dosiero back end; a CloudFlare Worker",
@@ -14,9 +14,6 @@
     "run": "wrangler dev --persist-to ~/.config/.wrangler/state/",
     "deploy": "wrangler deploy"
   },
-  "devDependencies": {
-    "wrangler": "^3.79.0"
-  },
   "imports": {
     "#db/*": "./src/db/*.js",
     "#requests/*": "./src/requests/*.js",
@@ -25,7 +22,8 @@
     "#commit": "./commitReference.js"
   },
   "dependencies": {
-    "hono": "^3.12.6",
-    "zod": "^3.22.4"
+    "@axel669/acheron": "^0.1.1",
+    "hono": "^3.12.12",
+    "zod": "^3.23.8"
   }
 }

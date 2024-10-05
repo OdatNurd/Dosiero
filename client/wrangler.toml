@@ -9,15 +9,6 @@ compatibility_date = "2024-06-03"
 
 [vars]
 
-# The values here are set when this is actively deployed by CloudFlare as a
-# result of pushing a new commit to the repository.
-#
-# They control what the rollup script that is used to deploy see as far as the
-# environment is converned, but they are not used at all locally.
-BUILD_TYPE = "production"
-API_ROOT_URI = "https://dosiero.odatnurd.net"
-GITHUB_ROOT_URI = "https://github.com/OdatNurd/dosiero"
-
 
 ################################################################################
 # D E V   S E R V E R   S E T T I N G S

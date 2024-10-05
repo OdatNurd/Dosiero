@@ -10,13 +10,20 @@ compatibility_date = "2024-06-03"
 workers_dev = false
 routes = [
     { pattern = "dosiero.odatnurd.net/api/*", zone_id="228f86abc5bc8b04719dc4671eb09dc0" },
-    { pattern = "dosiero.odatnurd.net/view/*", zone_id="228f86abc5bc8b04719dc4671eb09dc0" }
+    { pattern = "dosiero.odatnurd.net/view/*", zone_id="228f86abc5bc8b04719dc4671eb09dc0" },
+    { pattern = "dosiero.odatnurd.net/login*", zone_id="228f86abc5bc8b04719dc4671eb09dc0" }
 ]
 
 
 ################################################################################
 # B I N D I N G S
 ################################################################################
+
+
+# Bind to the auth worker
+services = [
+  { binding = "acheron", service = "acheron-auth" }
+]
 
 # Bind our data buckets; the name is specified by you when you create the bucket
 # initially.
@@ -38,6 +45,15 @@ database_id = "c19bc321-6d52-43ab-b400-a03c7e251607"
 
 [vars]
 
+# The frontend code needs to access us as the API, but it may be running on a
+# different hostname than we are (particulary during development). This sets
+# what the CORS origin header is set to, indicating what hosts are allowed to
+# talk to us.
+#
+# The default value here only works for cases where the Worker and the Pages
+# sites are both at the same origin (e.g. production); for localhost, this needs
+# to be overridden in .dev.vars instead.
+UI_ORIGIN = '*'
 
 
 ################################################################################
