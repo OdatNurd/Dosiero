@@ -1,11 +1,10 @@
 import { Hono } from 'hono';
-import { deleteCookie } from 'hono/cookie';
 
 import { cors, acheronAuth } from '#lib/middleware';
 
-import { user } from '#requests/user/index';
+import { auth } from '#requests/auth/index';
 import { server_info } from '#requests/server_info/index';
-
+import { user } from '#requests/user/index';
 
 
 /******************************************************************************/
@@ -27,9 +26,18 @@ app.use(acheronAuth);
 
 
 /*******************************************************************************
+ * Auth API
+ *******************************************************************************
+ * The routes in this section are related to logging a user in and out as well
+ * as handling the OAUTH flow for the auth mechanism.
+ ******************************************************************************/
+app.route('/', auth);
+
+
+/*******************************************************************************
  * Server API
  *******************************************************************************
- * The items in this section are related to getting information about the back
+ * The routes in this section are related to getting information about the back
  * end server component that is running the application.
  ******************************************************************************/
 
@@ -39,7 +47,7 @@ app.route(`${APIV1}/server_info`, server_info);
 /*******************************************************************************
  * User API
  *******************************************************************************
- * The items in this section are related to searching the list of users for
+ * The routes in this section are related to searching the list of users for
  * specific users, getting lists, and making modifications to existing users.
  *
  * There is no endpoint here for inserting a user; that happens implictly as a
@@ -47,70 +55,6 @@ app.route(`${APIV1}/server_info`, server_info);
  ******************************************************************************/
 
 app.route(`${APIV1}/user`, user);
-
-
-
-/* Acheron's GitHub login mechanism redirects to this endpoint to capture the
- * appropriate data from GitHub to complete the login.
- *
- * Here we use the Acheron githubAuth handler and directly return its response
- * so that we can complete the flow. */
-app.get(`/login/github`, async (ctx) => {
-  // Get the auth object from the middleware
-  const result = ctx.get("auth");
-
-  // TODO: What if this gets hand invoked by the user when they're already
-  //       logged in? Is there a response of some sort in that case?
-  //
-  // ANSWER: It blows up because of immutable headers. So if there is already
-  //         a user, we should redirect, like /login does/should.
-
-  // Not the final solution to the above, but flick the redirect in the result
-  // to go to the app origin, as otherwise it goes to the back end instead.
-  //
-  // The auth routes should probably be bound to the pages site, or we try to
-  // proxy the entire back end as pages functions that defer to the bound
-  // listener or such.
-  result.res.headers.set("location", ctx.env.app_origin);
-  return result.res
-});
-
-
-/* This is an example of a route that is "guarded" and will try to log the user
- * in if they're not already.
- *
- * This should actually be implemented as middleware, generally speaking. */
-app.get('/login', async (ctx) => {
-  // Get the Acheron GitHub auth information that was set by the auth
-  // middleware. This contains either a response, which indicates that we need
-  // to perform the auth flow, or it has the information on the user, in which
-  // case we are already logged in.
-  const result = ctx.get("auth")
-
-  // When the result has a response, it means that the auth flow needs to be
-  // kicked off. In that case, we should return the response directly so that
-  // the browser gets sent to the auth endpoint.
-  //
-  // If we didn't want to force a login in this case, then we would not return
-  // this value, and the user would just not be logged in.
-  if (result.res !== undefined) {
-    return result.res;
-  }
-
-  // We were already logged in, so redirect to the app origin.
-  return ctx.redirect(ctx.env.app_origin);
-});
-
-
-/* Handle a request to log out by deleting the cookie.
- *
- * This is currently redirecting back to the app origin, but presumably it could
- * not do that and then this would just blast the cookie and it would be up to
- * the caller to reload the auth. Not sure what is best there. */
-app.get('/logout', async (ctx) => {
-  deleteCookie(ctx, 'obol');
-  return ctx.redirect(ctx.env.app_origin);
-});
 
 
 /******************************************************************************/
