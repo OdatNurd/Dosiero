@@ -2,10 +2,10 @@ import { Hono } from 'hono';
 import { cors } from 'hono/cors';
 import { deleteCookie } from 'hono/cookie';
 
-
-import { commitReference } from '#commit';
+import {  success } from '#requests/common';
 
 import { githubAuth } from "@axel669/acheron";
+import { commitReference } from '#commit';
 
 
 /******************************************************************************/
@@ -61,7 +61,7 @@ app.use(async (ctx, next) => {
  ******************************************************************************/
 
 app.get(`${APIV1}/server_info`, ctx => {
-  return ctx.json(commitReference);
+  return success(ctx, 'Retreived server information', commitReference);
 });
 
 
@@ -96,7 +96,7 @@ app.get(`/login/github`, async (ctx) => {
 app.get(`${APIV1}/user`, async (ctx) => {
   // This route simplistically just needs to get the user that was stored into
   // the context by the auth middleware, if there is one.
-  return ctx.json(ctx.get('auth').user ?? {});
+  return success(ctx, 'retreived information on current user', ctx.get('auth').user ?? {});
 });
 
 

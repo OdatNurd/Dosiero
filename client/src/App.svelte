@@ -9,14 +9,14 @@
   let serverInfo = {};
   const getServerInfo = async () => {
     const res = await fetch(`${API}/server_info`);
-    serverInfo = await res.json();
+    serverInfo = (await res.json()).data;
     return serverInfo;
   }
 
   let userInfo = {};
   const getUserInfo = async () => {
     const res = await fetch(`${API}/user`, {"credentials": "include"});
-    userInfo = await res.json();
+    userInfo = (await res.json()).data;
     return userInfo;
   }
 
