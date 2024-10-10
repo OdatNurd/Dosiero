@@ -8,14 +8,14 @@
 
   let serverInfo = {};
   const getServerInfo = async () => {
-    const res = await fetch(`${API}/server_info`);
+    const res = await fetch(`${API}/server_info/version`);
     serverInfo = (await res.json()).data;
     return serverInfo;
   }
 
   let userInfo = {};
   const getUserInfo = async () => {
-    const res = await fetch(`${API}/user`, {"credentials": "include"});
+    const res = await fetch(`${API}/user/current`, {"credentials": "include"});
     userInfo = (await res.json()).data;
     return userInfo;
   }

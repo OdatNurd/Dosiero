@@ -5,7 +5,10 @@ import { deleteCookie } from 'hono/cookie';
 import {  success } from '#requests/common';
 
 import { githubAuth } from "@axel669/acheron";
-import { commitReference } from '#commit';
+
+import { user } from '#requests/user/index';
+import { server_info } from '#requests/server_info/index';
+
 
 
 /******************************************************************************/
@@ -60,9 +63,21 @@ app.use(async (ctx, next) => {
  * end server component that is running the application.
  ******************************************************************************/
 
-app.get(`${APIV1}/server_info`, ctx => {
-  return success(ctx, 'Retreived server information', commitReference);
-});
+app.route(`${APIV1}/server_info`, server_info);
+
+
+/*******************************************************************************
+ * User API
+ *******************************************************************************
+ * The items in this section are related to searching the list of users for
+ * specific users, getting lists, and making modifications to existing users.
+ *
+ * There is no endpoint here for inserting a user; that happens implictly as a
+ * part of auth requests.
+ ******************************************************************************/
+
+app.route(`${APIV1}/user`, user);
+
 
 
 /* Acheron's GitHub login mechanism redirects to this endpoint to capture the
@@ -88,15 +103,6 @@ app.get(`/login/github`, async (ctx) => {
   // listener or such.
   result.res.headers.set("location", ctx.env.app_origin);
   return result.res
-});
-
-
-/* Simple top level route; it returns JSON that tells you about the user that
- * is logged in, if any. */
-app.get(`${APIV1}/user`, async (ctx) => {
-  // This route simplistically just needs to get the user that was stored into
-  // the context by the auth middleware, if there is one.
-  return success(ctx, 'retreived information on current user', ctx.get('auth').user ?? {});
 });
 
 
