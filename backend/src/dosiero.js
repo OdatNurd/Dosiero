@@ -1,10 +1,7 @@
 import { Hono } from 'hono';
-import { cors } from 'hono/cors';
 import { deleteCookie } from 'hono/cookie';
 
-import {  success } from '#requests/common';
-
-import { githubAuth } from "@axel669/acheron";
+import { cors, acheronAuth } from '#lib/middleware';
 
 import { user } from '#requests/user/index';
 import { server_info } from '#requests/server_info/index';
@@ -22,38 +19,11 @@ const app = new Hono();
 /* The current API version; this prefixes all of our routes. */
 const APIV1 = '/api/v1'
 
-/* Ensure that the application can talk to the API. The value for the variable
- * is generally '*' in production, but needs to be the local URL of the UI in
- * development, or the dev UI can't talk to the server properly because of the
- * port difference. */
-app.use('*', (ctx, next) => {
-  // The environment is only available from inside of an active request.
-  const validCors = cors({
-      origin: ctx.env.UI_ORIGIN,
-      credentials: true
-  });
-
-  return validCors(ctx, next);
-});
-
-
-/* Middleware that plucks the current user, if any, from the token and stores
- * the value in the context for other requests to refer to. */
-app.use(async (ctx, next) => {
-  // Ask for the user from Acheron; if there is one, the result will contain a
-  // user field. When there is no user, we ignore that here; the login route
-  // triggers the full login flow if we want to log in.
-  const result = await githubAuth(
-      { request: ctx.req.raw, env: ctx.env },
-      ["read:user", "user:email"]
-  );
-
-  // Store the result as the auth response; it will have a "user" field if there
-  // is a user logged in, or a "res" that we should respond with to initiate the
-  // auth flow, if we want to start that.
-  ctx.set("auth", result);
-  return await next();
-});
+/* Set up the middleware for CORS so that the application can talk to the API,
+ * and set up the Acheron auth middleware to handle authentication of the
+ * current user. */
+app.use('*', cors);
+app.use(acheronAuth);
 
 
 /*******************************************************************************
