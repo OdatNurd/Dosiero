@@ -1,0 +1,158 @@
+Project Dosiero {
+  database_type: 'SQLite'
+  Note: 'Hand built clone of GitHub Gists'
+}
+
+
+Table Roles [headercolor: #1E69FD] {
+  roleId TEXT [unique, pk]
+  name TEXT [not null]
+
+  accessLevel INTEGER [not null]
+
+  Note: '''
+    The list of unique roles have named and an access level.
+
+    The access level starts at 0 for admin and goes up from there.
+
+    The lower the access level, the better the access.
+  '''
+}
+
+
+Table Users [headercolor: #1E69FD] {
+  userId TEXT [unique, pk]
+
+  acheronUser TEXT [not null]
+  acheronMethod TEXT [not null]
+
+  name TEXT [not null]
+  emailAddress TEXT [default: '']
+  profileImage TEXT [default: '']
+  role TEXT [not null, ref: > Roles.roleId]
+
+  signup DATETIME [not null]
+  lastLogin DATETIME [not null]
+
+  active BOOL [not null, default: true]
+
+  indexes {
+    (acheronUser, acheronMethod) [name: 'idx_auth_user']
+  }
+
+  Note: '''
+    UserId values are a unique key that we set up.
+
+    The auth mechanism provides a distinct user per auth method.
+
+    a validated email address is strongly encourgaged but not strictly required.
+  '''
+}
+
+
+Table Dossiers [headercolor: #2D6512] {
+  dossierId TEXT [unique, pk]
+
+  ownerId TEXT [not null, ref: > Users.userId]
+
+  name TEXT [not null]
+  public BOOL [not null, default: true]
+
+  created DATETIME [not null]
+  lastUpdate DATETIME [not null]
+
+  revisions INTEGER [not null, default: 1]
+  currentRevision TEXT [not null, ref: - Revisions.revisionId]
+
+  deleteAfter DATETIME [null, default: null, note: 'When set, delete after this date']
+
+  // The first index indexes on deleteAfter and then ownerId because SQLite will only use
+  // an index if a query uses all leftmost keys, and we will always want to filter out
+  // items based on deletion status, and sometimes also based on the owner
+  indexes {
+    (deleteAfter, ownerId, public) [name: 'idx_dossier_search']
+    created [name: 'idx_dossier_creation']  // ascending
+    lastUpdate [name: 'idx_dossier_update'] // ascending
+  }
+
+  Note: '''
+    The key information for a single dossier.
+
+    On each update revision, the core entry is updated with the new revisionId and number.
+  '''
+}
+
+
+Table Revisions [headercolor: #2D6512] {
+  revisionId TEXT [unique, pk]
+  revisionNumber INTEGER [not null]
+
+  parentId TEXT [unique, not null, ref: > Dossiers.dossierId]
+
+  created DATETIME [not null]
+
+  indexes {
+    parentId [name: 'idx_revision_parent']
+  }
+
+  Note: '''
+    Each revision is a distinct entry and is essential a holder that maps a revision to it's parent dossier.
+  '''
+}
+
+
+Table Contents [headercolor: #2D6512] {
+  contentId TEXT [unique, pk]
+
+  parentId TEXT [not null, ref: <> Revisions.revisionId]
+  dossierId TEXT [unique, not null, ref: > Dossiers.dossierId]
+
+  // R2 metadata possibly stores dossierId, if we can delete based on
+  // a metadata match or similar.
+  storageKey TEXT [not null]
+
+  fileName TEXT [not null]
+  contentType TEXT [not null]
+
+  created DATETIME [not null]
+  lastUpdate DATETIME [not null]
+
+  indexes {
+    parentId [name: 'idx_content_parent']
+    dossierId [name: 'idx_content_dossier']
+  }
+
+  Note: '''
+    One entry per file in every dossier.
+
+    Untouched files share the same storage key as the prior revision.
+
+    Keys on parent dossier to make deletes easier.
+  '''
+}
+
+
+Table PurgeList [headercolor: #990D0D] {
+  storageKey TEXT [not null, note: 'not a foreign key']
+  purgeAfter DATETIME [not null]
+
+  Note: '''
+    When deleting a revision, content keys get flagged to this table.
+
+    Cron job does the work of purging the actual keys after an interval.
+
+    Only the bucket content remains; deletes are not recoverable.
+  '''
+}
+
+
+Note dossier_notes {
+'''When a dossier is created, an implicit first revision is created for it.
+
+Additional changes will cause a new revision. The most recent revision info is updated into the dossier.
+
+Content entries store files and their data. The storage key is the R2 storage key to fetch the data for the content.
+
+A revision that does not modify files will include new Content entries that reuses the storageKey from the prior revision.
+'''
+}

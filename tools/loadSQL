@@ -1,0 +1,94 @@
+#!/bin/bash
+
+#
+# When running locally, Wrangler is not capable of handling SQL files that have
+# comments in them due to its naive statement parser. Thus in order to run SQL
+# files locally, the comments need to be stripped out.
+#
+# Similarly, for local development we prefer to have all bound resources stored
+# in the same location, so that when multiple projects access them, everything
+# is shared.
+#
+# Wrangler has the concept of being able to change the persist location, but
+# only via command line argument.
+#
+# Taken together, this simple tool allows for loading of SQL data from the given
+# SQL file, stripping comments out, and ensuring the proper persistence location
+# is provided. It can be used for both local and remote DB accesses, but smooths
+# things out so that the same command can be executed both ways in order to
+# relieve frustrations.
+#
+# NOTE:
+#     This **MUST** be executed such that the CWD has the wrangler.toml file
+#     that declares the database. Otherwise it won't be able to find the proper
+#     database binding to know how to proceed.
+
+#
+# The name of the database that operations should write to; this must be bound
+# in a wrangler.toml file that is in the current directory.
+#
+DATABASE="dosiero"
+
+#
+#  The arguments used to persist the data into a known local wrangler location
+# when working locally.
+#
+# If this is empty, Wrangler will choose a location specific to the project that
+# is being executed currently.
+#
+PERSIST_TO="--persist-to $HOME/.config/.wrangler/state/"
+
+#
+# Wrangler can't read input SQL from a pipe, so we need to create a temporary
+# file for it to process.
+#
+TMPFILE="/tmp/$$_wrangler_is_dumb.sql"
+
+#
+# The execution target; this defaults to being local, but can be overridden on
+# the command line at startup.
+#
+TARGET="--local"
+
+#
+# If the first command line argument is "--remote", then swap the target to that
+# and remove the persistence information.
+#
+if [ "$1" == "--remote" ]; then
+    TARGET="--remote"
+    PERSIST_TO=""
+    shift
+fi
+
+#
+# Ensure that no matter how the script terminates, any temporary file we create
+# gets cleaned up.
+#
+cleanup() {
+    rm -rf $TMPFILE
+}
+trap cleanup EXIT
+
+#
+# In order to work, Wrangler needs to know how to talk to the database, and it
+# can only know that if there is a configuration file in the current folder that
+# tells it. As a quick test, ensure that the current directory has such a file.
+#
+if [ ! -f "wrangler.toml" ]; then
+    echo "no wrangler.toml file in the current directory"
+    exit 1
+fi
+
+#
+# Ensure that we were given a SQL file that exists.
+#
+if [ "$1" == "" -o ! -f "$1" ]; then
+    echo "no SQL file to load; did you specify a file that exists?"
+    exit 1
+fi
+
+#
+# Create a temporary file without comments and execute it.
+#
+cat $1 | sed -e "s/^--.*//g" -e "/^$/d" > $TMPFILE
+wrangler d1 execute $DATABASE $TARGET --file=$TMPFILE $PERSIST_TO
