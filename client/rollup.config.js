@@ -24,7 +24,15 @@ import { commitReference } from './commitReference.js';
 /* Determine if this build is production or not; by default we assume that all
  * builds are not production unless they are explictly set that way. */
 const production = (process.env.BUILD_TYPE === 'production');
-console.log(`build mode: ${production ? 'production' : 'development'}`);
+
+/* Gather the environment variables that are dynamically injected into the built
+ * code. */
+const apiRoot = process.env.API_ROOT_URI;
+const githubRoot = process.env.GITHUB_ROOT_URI;
+
+console.log(`Build:    ${production ? 'production' : 'development'}`);
+console.log(`API root: ${apiRoot}`);
+console.log(`GitHub:   ${githubRoot}`);
 
 
 /******************************************************************************/
@@ -86,8 +94,8 @@ const buildList = [
       replace(
       {
         'preventAssignment': true,
-        'process.env.API_ROOT_URI': JSON.stringify(process.env.API_ROOT_URI),
-        'process.env.GITHUB_ROOT_URI': JSON.stringify(process.env.GITHUB_ROOT_URI),
+        'process.env.API_ROOT_URI': JSON.stringify(apiRoot),
+        'process.env.GITHUB_ROOT_URI': JSON.stringify(githubRoot),
         'process.env.UI_RELEASE_COMMIT': JSON.stringify(commitReference.commit),
       }),
 

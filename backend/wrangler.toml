@@ -20,23 +20,21 @@ routes = [
 ################################################################################
 
 
-# Bind to the auth worker
+# Bind to the Acheron auth system.
 services = [
   { binding = "acheron", service = "acheron-auth" }
 ]
 
-# Bind our data buckets; the name is specified by you when you create the bucket
-# initially.
+# Bind to the R2 storage bucket that will contain the contents of uploaded
+# dossiers.
 r2_buckets = [
     { binding = "STORAGE", bucket_name = "dosiero-storage" }
 ]
 
-# Bind our database; the name and ID come from the D1 page and are visible when
-# you create DB or go back to look at one.
-[[d1_databases]]
-binding = "DB"
-database_name = "dosiero"
-database_id = "c19bc321-6d52-43ab-b400-a03c7e251607"
+# Bind to the database that will track the application information as a whole.
+d1_databases = [
+    { binding = "DB", database_name = "dosiero", database_id = "c19bc321-6d52-43ab-b400-a03c7e251607"}
+]
 
 
 ################################################################################
@@ -54,6 +52,35 @@ database_id = "c19bc321-6d52-43ab-b400-a03c7e251607"
 # sites are both at the same origin (e.g. production); for localhost, this needs
 # to be overridden in .dev.vars instead.
 UI_ORIGIN = '*'
+
+################################################################################
+# A C H E R O N   A U T H   C O N F I G
+################################################################################
+
+# Configure the github authentication clientID and client secret to be used
+# by Acheron.
+#
+# These should be distinct from the ones used for development for a variety of
+# reasons, not the least of which being that GitHub does not support the notion
+# of more than one redirect URL when auth is completed.
+github_client_id='Ov23liPW68JQMFvoUhny'
+#github_client_secret='sorrynotleakingit'
+
+# The signing secret for JWT tokens that are minted by Acheron after an auth
+# request suceeds.
+#jwt_secret='sorrynotleakingthiseither'
+
+# Acheron optionally uses this as the base URL it uses to come up with the
+# appropriate redirection after an auth attempt. It really only needs to be set
+# locally (where it exists in .dev.vars) because as long as routes are defined
+# the worker treats itself as working at that URL as far as its request objects
+# go, which confuses Acheron.
+#
+# For the time being this is also used by the code to know where to redirect to
+# after an authentication request is successful, so it is used in production as
+# well. This is just temporary while the pages and worker components remain
+# distinct and unbound.
+app_origin='https://dosiero.odatnurd.net'
 
 
 ################################################################################

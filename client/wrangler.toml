@@ -9,6 +9,15 @@ compatibility_date = "2024-06-03"
 
 [vars]
 
+# The configuration values that should be set when the build command runs on
+# deployment (via the rollup configuration).
+#
+# The rollup build uses the values of the variables to replace textual strings
+# into the files that generate.
+BUILD_TYPE = "production"
+API_ROOT_URI = "https://dosiero.odatnurd.net"
+GITHUB_ROOT_URI = "https://github.com/OdatNurd/dosiero"
+
 
 ################################################################################
 # D E V   S E R V E R   S E T T I N G S
