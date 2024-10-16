@@ -1,0 +1,19 @@
+meta {
+  name: Get Current
+  type: http
+  seq: 1
+}
+
+get {
+  url: {{dosiero_v1}}/user/current
+  body: none
+  auth: none
+}
+
+docs {
+  Get the user information for the currently authenticated user, if any.
+
+  The return will always contain an object, but the object is empty when the user is not actually logged in.
+
+  Additionally, the status of the result will indicate whether or not a value was provided.
+}

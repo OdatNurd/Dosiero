@@ -1,0 +1,20 @@
+meta {
+  name: Version
+  type: http
+  seq: 1
+}
+
+get {
+  url: {{dosiero_v1}}/server/version
+  body: none
+  auth: none
+}
+
+docs {
+  Get information regarding the version of the server that is currently running.
+
+  This will provide the:
+    - Deployment date for the release
+    - The commit that was checked out during the deployment
+    - Whether or not there were uncommited modifications at the time
+}

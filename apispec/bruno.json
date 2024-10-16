@@ -1,0 +1,13 @@
+{
+  "version": "1",
+  "name": "Dosiero",
+  "type": "collection",
+  "ignore": [
+    "node_modules",
+    ".git"
+  ],
+  "presets": {
+    "requestType": "http",
+    "requestUrl": "{{dosiero_v1}}"
+  }
+}

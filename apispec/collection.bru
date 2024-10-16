@@ -1,0 +1,8 @@
+script:pre-request {
+  // If we want to use auth, insert the obol cookie header; note that
+  // all variables are of type string.
+  if (bru.getEnvVar('useAuth') === 'true') {
+    const obol = bru.getEnvVar('obol') ?? '';
+    req.setHeader('Cookie', `obol=${obol}`);
+  }
+}
