@@ -8,7 +8,7 @@
 
   let serverInfo = {};
   const getServerInfo = async () => {
-    const res = await fetch(`${API}/server_info/version`);
+    const res = await fetch(`${API}/server/version`);
     serverInfo = (await res.json()).data;
     return serverInfo;
   }

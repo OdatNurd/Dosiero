@@ -41,7 +41,7 @@ app.route('/', auth);
  * end server component that is running the application.
  ******************************************************************************/
 
-app.route(`${APIV1}/server_info`, server_info);
+app.route(`${APIV1}/server`, server_info);
 
 
 /*******************************************************************************
