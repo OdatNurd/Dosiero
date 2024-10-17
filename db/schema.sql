@@ -47,7 +47,7 @@ CREATE TABLE IF NOT EXISTS Roles (
 -- were the same user logging in via multiple methods.
 CREATE TABLE IF NOT EXISTS Users (
     userId TEXT UNIQUE PRIMARY KEY,
-    role TEXT REFERENCES Roles(roleId),
+    role TEXT REFERENCES Roles(roleId) DEFAULT('rVBBPOUWqPbWBmiUQuwGs'),
 
     acheronUser TEXT NOT NULL,
     acheronMethod TEXT NOT NULL,
@@ -61,7 +61,7 @@ CREATE TABLE IF NOT EXISTS Users (
     signup DATETIME NOT NULL DEFAULT(strftime('%Y-%m-%dT%H:%M:%SZ', 'now')),
     lastLogin DATETIME NOT NULL DEFAULT(strftime('%Y-%m-%dT%H:%M:%SZ', 'now')),
 
-    isActive INTEGER NOT NULL DEFAULT(1)
+    isActive BOOLEAN NOT NULL DEFAULT(true)
 );
 
 -- We need to be able to look up a user not only by their ID, but also by the
