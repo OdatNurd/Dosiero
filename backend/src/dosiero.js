@@ -3,7 +3,7 @@ import { Hono } from 'hono';
 import { cors, acheronAuth } from '#lib/middleware';
 
 import { auth } from '#requests/auth/index';
-import { server_info } from '#requests/server_info/index';
+import { server } from '#requests/server/index';
 import { user } from '#requests/user/index';
 
 
@@ -41,7 +41,7 @@ app.route('/', auth);
  * end server component that is running the application.
  ******************************************************************************/
 
-app.route(`${APIV1}/server`, server_info);
+app.route(`${APIV1}/server`, server);
 
 
 /*******************************************************************************
