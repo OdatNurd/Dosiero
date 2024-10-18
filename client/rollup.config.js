@@ -27,11 +27,9 @@ const production = (process.env.BUILD_TYPE === 'production');
 
 /* Gather the environment variables that are dynamically injected into the built
  * code. */
-const apiRoot = process.env.API_ROOT_URI;
 const githubRoot = process.env.GITHUB_ROOT_URI;
 
 console.log(`Build:    ${production ? 'production' : 'development'}`);
-console.log(`API root: ${apiRoot}`);
 console.log(`GitHub:   ${githubRoot}`);
 
 
@@ -94,7 +92,6 @@ const buildList = [
       replace(
       {
         'preventAssignment': true,
-        'process.env.API_ROOT_URI': JSON.stringify(apiRoot),
         'process.env.GITHUB_ROOT_URI': JSON.stringify(githubRoot),
         'process.env.UI_RELEASE_COMMIT': JSON.stringify(commitReference.commit),
       }),

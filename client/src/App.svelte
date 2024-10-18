@@ -2,9 +2,9 @@
   import { wsx } from "@axel669/zephyr";
   import { LoadZone, Button, Screen, Paper, Flex, Titlebar, Text, Icon, Link } from "@axel669/zephyr";
 
-  const API = `${process.env.API_ROOT_URI}/api/v1`;
-  const LOGIN = `${process.env.API_ROOT_URI}/login`;
-  const LOGOUT = `${process.env.API_ROOT_URI}/logout`;
+  const API = `/api/v1`;
+  const LOGIN = `/login`;
+  const LOGOUT = `/logout`;
 
   let serverInfo = {};
   const getServerInfo = async () => {
@@ -37,6 +37,9 @@
     <Titlebar slot="header">
       <Flex p="0px" gap="0px" slot="title">
         <Text title> Dosiero! </Text>
+        {#if serverInfo.commit !== undefined}
+          <Text subtitle>{serverInfo.commit}</Text>
+        {/if}
       </Flex>
 
       <Link button ground m="2px" w="44px" color="@primary" href={userInfo.username ? LOGOUT : LOGIN} slot="action">
