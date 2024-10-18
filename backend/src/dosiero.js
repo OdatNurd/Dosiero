@@ -1,8 +1,7 @@
 import { Hono } from 'hono';
 
-import { cors, acheronAuth } from '#lib/middleware';
+import { acheronAuth } from '#lib/middleware';
 
-import { auth } from '#requests/auth/index';
 import { server } from '#requests/server/index';
 import { user } from '#requests/user/index';
 
@@ -18,20 +17,9 @@ const app = new Hono();
 /* The current API version; this prefixes all of our routes. */
 const APIV1 = '/api/v1'
 
-/* Set up the middleware for CORS so that the application can talk to the API,
- * and set up the Acheron auth middleware to handle authentication of the
+/* Set up the middleware for Acheron auth to handle authentication of the
  * current user. */
-app.use('*', cors);
-app.use(acheronAuth);
-
-
-/*******************************************************************************
- * Auth API
- *******************************************************************************
- * The routes in this section are related to logging a user in and out as well
- * as handling the OAUTH flow for the auth mechanism.
- ******************************************************************************/
-app.route('/', auth);
+app.use('*', acheronAuth);
 
 
 /*******************************************************************************

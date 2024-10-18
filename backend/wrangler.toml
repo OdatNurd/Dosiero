@@ -8,11 +8,6 @@ compatibility_date = "2024-06-03"
 # Here the zone_id comes from the API section of the overview page of a site in
 # the CF Dashboard.
 workers_dev = false
-routes = [
-    { pattern = "dosiero.odatnurd.net/api/*", zone_id="228f86abc5bc8b04719dc4671eb09dc0" },
-    { pattern = "dosiero.odatnurd.net/view/*", zone_id="228f86abc5bc8b04719dc4671eb09dc0" },
-    { pattern = "dosiero.odatnurd.net/login*", zone_id="228f86abc5bc8b04719dc4671eb09dc0" }
-]
 
 
 ################################################################################
@@ -28,12 +23,12 @@ services = [
 # Bind to the R2 storage bucket that will contain the contents of uploaded
 # dossiers.
 r2_buckets = [
-    { binding = "STORAGE", bucket_name = "dosiero-storage" }
+    { binding = "storage", bucket_name = "dosiero-storage" }
 ]
 
 # Bind to the database that will track the application information as a whole.
 d1_databases = [
-    { binding = "DB", database_name = "dosiero", database_id = "c19bc321-6d52-43ab-b400-a03c7e251607"}
+    { binding = "db", database_name = "dosiero", database_id = "c19bc321-6d52-43ab-b400-a03c7e251607"}
 ]
 
 
@@ -42,16 +37,6 @@ d1_databases = [
 ################################################################################
 
 [vars]
-
-# The frontend code needs to access us as the API, but it may be running on a
-# different hostname than we are (particulary during development). This sets
-# what the CORS origin header is set to, indicating what hosts are allowed to
-# talk to us.
-#
-# The default value here only works for cases where the Worker and the Pages
-# sites are both at the same origin (e.g. production); for localhost, this needs
-# to be overridden in .dev.vars instead.
-UI_ORIGIN = '*'
 
 ################################################################################
 # A C H E R O N   A U T H   C O N F I G
@@ -69,18 +54,6 @@ github_client_id='Ov23liPW68JQMFvoUhny'
 # The signing secret for JWT tokens that are minted by Acheron after an auth
 # request suceeds.
 #jwt_secret='sorrynotleakingthiseither'
-
-# Acheron optionally uses this as the base URL it uses to come up with the
-# appropriate redirection after an auth attempt. It really only needs to be set
-# locally (where it exists in .dev.vars) because as long as routes are defined
-# the worker treats itself as working at that URL as far as its request objects
-# go, which confuses Acheron.
-#
-# For the time being this is also used by the code to know where to redirect to
-# after an authentication request is successful, so it is used in production as
-# well. This is just temporary while the pages and worker components remain
-# distinct and unbound.
-app_origin='https://dosiero.odatnurd.net'
 
 
 ################################################################################

@@ -1,26 +1,7 @@
 /******************************************************************************/
 
-import { cors as honoCors } from 'hono/cors';
 
 import { githubAuth } from "@axel669/acheron";
-
-
-/******************************************************************************/
-
-
-/* Ensure that the application can talk to the API. The value for the variable
- * is generally '*' in production, but needs to be the local URL of the UI in
- * development, or the dev UI can't talk to the server properly because of the
- * port difference. */
-export function cors(ctx, next) {
-    // The environment is only available from inside of an active request.
-    const validCors = honoCors({
-        origin: ctx.env.UI_ORIGIN,
-        credentials: true
-    });
-
-    return validCors(ctx, next);
-}
 
 
 /******************************************************************************/
