@@ -4,6 +4,18 @@ compatibility_date = "2024-06-03"
 
 
 ################################################################################
+# B I N D I N G S
+################################################################################
+
+
+# Bind to the Acheron auth system and the dosiero api
+services = [
+  { binding = "acheron", service = "acheron-auth" },
+  { binding = "dosiero", service = "dosiero-api" }
+]
+
+
+################################################################################
 # G E N E R A L
 ################################################################################
 
@@ -15,7 +27,6 @@ compatibility_date = "2024-06-03"
 # The rollup build uses the values of the variables to replace textual strings
 # into the files that generate.
 BUILD_TYPE = "production"
-API_ROOT_URI = "https://dosiero.odatnurd.net"
 GITHUB_ROOT_URI = "https://github.com/OdatNurd/dosiero"
 
 
