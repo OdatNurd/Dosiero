@@ -20,7 +20,7 @@ INSERT INTO Roles(roleId, name, accessLevel)
 -- Insert an initial user to be the administrator. Unless you're the person that
 -- wrote this software, you probably want to change this if you run your own
 -- version, unless you'd like OdatNurd to be an administrator on your site.
-INSERT INTO Users(userId, role, acheronUser, acheronMethod, name, emailAddress, profileImage )
+INSERT INTO Users(userId, role, acheronId, acheronProvider, name, emailAddress, profileImage )
   VALUES
     ('XHmX-SwOs-r-CVfbFpDq3', 'SctYBZqwLgiuNgZgkATsZ',
         '13212876', 'github',

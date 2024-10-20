@@ -49,8 +49,8 @@ CREATE TABLE IF NOT EXISTS Users (
     userId TEXT UNIQUE PRIMARY KEY,
     role TEXT REFERENCES Roles(roleId) DEFAULT('rVBBPOUWqPbWBmiUQuwGs'),
 
-    acheronUser TEXT NOT NULL,
-    acheronMethod TEXT NOT NULL,
+    acheronId TEXT NOT NULL,
+    acheronProvider TEXT TEXT NOT NULL,
 
     name TEXT NOT NULL,
     emailAddress TEXT NOT NULL DEFAULT(''),
@@ -67,7 +67,7 @@ CREATE TABLE IF NOT EXISTS Users (
 -- We need to be able to look up a user not only by their ID, but also by the
 -- external Acheron authentication method, so that we can cross associate the
 -- two.
-CREATE UNIQUE INDEX idx_auth_user on Users(acheronUser, acheronMethod);
+CREATE UNIQUE INDEX idx_auth_acheron on Users(acheronId, acheronProvider);
 
 
 --------------------------------------------------------------------------------

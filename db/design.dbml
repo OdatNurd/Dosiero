@@ -23,8 +23,8 @@ Table Roles [headercolor: #1E69FD] {
 Table Users [headercolor: #1E69FD] {
   userId TEXT [unique, pk]
 
-  acheronUser TEXT [not null]
-  acheronMethod TEXT [not null]
+  acheronId TEXT [not null]
+  acheronProvider TEXT [not null]
 
   name TEXT [not null]
   emailAddress TEXT [default: '']
@@ -37,7 +37,7 @@ Table Users [headercolor: #1E69FD] {
   active BOOL [not null, default: true]
 
   indexes {
-    (acheronUser, acheronMethod) [name: 'idx_auth_user']
+    (acheronId, acheronProvider) [name: 'idx_auth_user']
   }
 
   Note: '''
