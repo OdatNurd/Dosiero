@@ -42,7 +42,7 @@
         {/if}
       </Flex>
 
-      <Link button ground m="2px" w="44px" color="@primary" href={userInfo.username ? LOGOUT : LOGIN} slot="action">
+      <Link button ground m="2px" w="44px" color="@primary" href={userInfo.name ? LOGOUT : LOGIN} slot="action">
         <Icon name="person-fill"></Icon>
       </Link>
     </Titlebar>

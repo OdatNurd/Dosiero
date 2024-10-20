@@ -3,6 +3,8 @@
 
 import { success, fail } from '#requests/common';
 
+import { dbGetUserDetails } from '#db/user'
+
 
 /******************************************************************************/
 
@@ -18,11 +20,12 @@ export async function reqCurrentUserDetails(ctx) {
 
   // If there is not a user, then we can't actually tell you about one.
   if (user === undefined) {
-    return fail(ctx, `there is currently no user logged in`, 401, {});
+    return success(ctx, `there is currently no user logged in`, {});
   }
 
   // Return information on the current user.
-  return success(ctx, `details for user ${user.id}`, user);
+  const userInfo = await dbGetUserDetails(ctx.env.db, user.id, user.provider);
+  return success(ctx, `details for user ${user.id}`, userInfo);
 }
 
 
