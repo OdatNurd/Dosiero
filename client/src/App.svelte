@@ -38,7 +38,12 @@
       <Flex p="0px" gap="0px" slot="title">
         <Text title> Dosiero! </Text>
         {#if serverInfo.commit !== undefined}
-          <Text subtitle>{serverInfo.commit}</Text>
+          <Text subtitle>
+            {serverInfo.commit}
+            {#if serverInfo.treeIsDirty}
+              (with changes)
+            {/if}
+          </Text>
         {/if}
       </Flex>
 

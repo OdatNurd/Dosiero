@@ -21,11 +21,14 @@ export async function dbUserAddNew(db, user) {
 
   // Do the insert of the data; we don't actually care about the return on
   // this one, since all we need is the userId and we already have it.
+  //
+  // Note that when the provider is 'github', the email address might not be
+  // present in the body if the user has not set a public email.
   await dbFetchOne(db, 'user_add_new', `
     INSERT INTO Users(userId, acheronId, acheronProvider,
                               name, emailAddress, profileImage, role)
     VALUES(?1, ?2, ?3, ?4, ?5, ?6, (SELECT roleId from Roles WHERE name = 'user'));
-  `, [userId, user.id, user.provider, user.username, user.email, user.avatar]);
+  `, [userId, user.id, user.provider, user.username, user.email ?? '', user.avatar]);
 
   return userId;
 }
