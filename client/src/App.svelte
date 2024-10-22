@@ -1,6 +1,6 @@
 <script>
   import { wsx } from "@axel669/zephyr";
-  import { LoadZone, Button, Screen, Paper, Flex, Titlebar, Text, Icon, Link } from "@axel669/zephyr";
+  import { Avatar, LoadZone, Button, Screen, Paper, Flex, Titlebar, Text, Icon, Link } from "@axel669/zephyr";
 
   const API = `/api/v1`;
   const LOGIN = `/login`;
@@ -15,7 +15,7 @@
 
   let userInfo = {};
   const getUserInfo = async () => {
-    const res = await fetch(`${API}/user/current`, {"credentials": "include"});
+    const res = await fetch(`${API}/user/current`);
     userInfo = (await res.json()).data;
     return userInfo;
   }
@@ -47,8 +47,8 @@
         {/if}
       </Flex>
 
-      <Link button ground m="2px" w="44px" color="@primary" href={userInfo.name ? LOGOUT : LOGIN} slot="action">
-        <Icon name="person-fill"></Icon>
+      <Link button ground m="2px" p="4px" w="52px" color="@primary" href={userInfo.name ? LOGOUT : LOGIN} slot="action">
+        <Avatar w="36px" image={userInfo.profileImage ? userInfo.profileImage : '/images/avatar_default.png'} />
       </Link>
     </Titlebar>
 
