@@ -14,9 +14,14 @@
   }
 
   let userInfo = {};
+  let profileImage = '/images/avatar_default.png';
   const getUserInfo = async () => {
     const res = await fetch(`${API}/user/current`);
     userInfo = (await res.json()).data;
+    if (userInfo.profileImage !== undefined && userInfo.profileImage !== '') {
+      profileImage = userInfo.profileImage;
+    }
+
     return userInfo;
   }
 
@@ -48,7 +53,7 @@
       </Flex>
 
       <Link button ground m="2px" p="4px" w="52px" color="@primary" href={userInfo.name ? LOGOUT : LOGIN} slot="action">
-        <Avatar w="36px" image={userInfo.profileImage ? userInfo.profileImage : '/images/avatar_default.png'} />
+        <Avatar w="36px" image={profileImage} />
       </Link>
     </Titlebar>
 
