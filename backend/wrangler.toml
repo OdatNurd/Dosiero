@@ -15,11 +15,6 @@ workers_dev = false
 ################################################################################
 
 
-# Bind to the Acheron auth system.
-services = [
-  { binding = "acheron", service = "acheron-auth" }
-]
-
 # Bind to the R2 storage bucket that will contain the contents of uploaded
 # dossiers.
 r2_buckets = [
@@ -37,23 +32,6 @@ d1_databases = [
 ################################################################################
 
 [vars]
-
-################################################################################
-# A C H E R O N   A U T H   C O N F I G
-################################################################################
-
-# Configure the github authentication clientID and client secret to be used
-# by Acheron.
-#
-# These should be distinct from the ones used for development for a variety of
-# reasons, not the least of which being that GitHub does not support the notion
-# of more than one redirect URL when auth is completed.
-github_client_id='Ov23liPW68JQMFvoUhny'
-#github_client_secret='sorrynotleakingit'
-
-# The signing secret for JWT tokens that are minted by Acheron after an auth
-# request suceeds.
-#jwt_secret='sorrynotleakingthiseither'
 
 
 ################################################################################

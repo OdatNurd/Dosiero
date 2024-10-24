@@ -22,7 +22,6 @@
     "#commit": "./commitReference.js"
   },
   "dependencies": {
-    "@axel669/acheron": "^0.1.4",
     "hono": "^3.12.12",
     "nanoid": "^5.0.7",
     "zod": "^3.23.8"
