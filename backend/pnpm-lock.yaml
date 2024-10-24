@@ -9,8 +9,8 @@ importers:
   .:
     dependencies:
       '@axel669/acheron':
-        specifier: ^0.1.3
-        version: 0.1.3
+        specifier: ^0.1.4
+        version: 0.1.4
       hono:
         specifier: ^3.12.12
         version: 3.12.12
@@ -23,8 +23,8 @@ importers:
 
 packages:
 
-  '@axel669/acheron@0.1.3':
-    resolution: {integrity: sha512-864g04rUGG5R9QXRjFRPWmbaXmkjLCzZo1+dRTLZLtR70hQW7g83XLwmvGAjwqWpt9nivMTXc5/d5I+PbK2hSQ==}
+  '@axel669/acheron@0.1.4':
+    resolution: {integrity: sha512-qetXvqoP8xReE6YqCxc5HbK0ZMauR5QqjA6OJ/UTHShq+Gt0F8esaKWfihll1o15dj4MeCaCXeijCVtB59LTBA==}
     hasBin: true
 
   '@sec-ant/readable-stream@0.4.1':
@@ -132,7 +132,7 @@ packages:
 
 snapshots:
 
-  '@axel669/acheron@0.1.3':
+  '@axel669/acheron@0.1.4':
     dependencies:
       execa: 9.4.1
 

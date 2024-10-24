@@ -17,7 +17,8 @@
     "client:build": "cd client && npm run build",
     "backend:run": "cd backend && npm run run",
     "backend:deploy": "cd backend && npm run deploy",
-    "acheron:build": "cd backend/node_modules/@axel669/acheron/worker && pnpm i && pnpm run build",
-    "acheron:run": "cd backend/node_modules/@axel669/acheron/worker && pnpm run start"
+    "acheron:build": "cd client/node_modules/@axel669/acheron/worker && pnpm i && pnpm run build",
+    "acheron:run": "cd client/node_modules/@axel669/acheron/worker && pnpm run start",
+    "acheron:deploy": "npm run acheron:build && cd client/node_modules/@axel669/acheron/worker && wrangler deploy"
   }
 }
