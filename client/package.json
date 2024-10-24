@@ -14,7 +14,10 @@
     "run": "wrangler pages dev --persist-to ~/.config/.wrangler/state/",
     "watch": "npm run getCommit && rollup -c -w",
     "build": "npm run getCommit && rollup -c",
-    "getCommit": "node getCurrentCommit.js"
+    "getCommit": "node getCurrentCommit.js",
+    "acheron:build": "cd node_modules/@axel669/acheron/worker && pnpm i && pnpm run build",
+    "acheron:run": "cd node_modules/@axel669/acheron/worker && pnpm run start",
+    "acheron:deploy": "pnpm run acheron:build && cd node_modules/@axel669/acheron/worker && wrangler deploy"
   },
   "devDependencies": {
     "@axel669/asuid": "^0.2.1",

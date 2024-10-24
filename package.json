@@ -11,14 +11,14 @@
     "url": "https://odatnurd.net"
   },
   "scripts": {
-    "local:seed-db": "cd backend && npm run local:seed-db",
-    "client:run": "cd client && npm run run",
-    "client:watch": "cd client && npm run watch",
-    "client:build": "cd client && npm run build",
-    "backend:run": "cd backend && npm run run",
-    "backend:deploy": "cd backend && npm run deploy",
-    "acheron:build": "cd client/node_modules/@axel669/acheron/worker && pnpm i && pnpm run build",
-    "acheron:run": "cd client/node_modules/@axel669/acheron/worker && pnpm run start",
-    "acheron:deploy": "npm run acheron:build && cd client/node_modules/@axel669/acheron/worker && wrangler deploy"
+    "postinstall": "(cd client && pnpm i && pnpm run acheron:build); (cd backend && pnpm i)",
+    "acheron:build": "cd client && pnpm run acheron:build",
+    "acheron:run": "cd client && pnpm run acheron:run",
+    "acheron:deploy": "cd client && pnpm run acheron:deploy",
+    "client:run": "cd client && pnpm run run",
+    "client:watch": "cd client && pnpm run watch",
+    "client:build": "cd client && pnpm run build",
+    "backend:run": "cd backend && pnpm run run",
+    "backend:deploy": "cd backend && pnpm run deploy"
   }
 }
